@@ -1,6 +1,7 @@
 import argparse
 
 import os
+import importlib.util
 import random
 import torch
 import numpy as np
@@ -8,7 +9,10 @@ import torch.nn.functional as F
 from google_drive_downloader import GoogleDriveDownloader as gdd
 from torch.utils.tensorboard import SummaryWriter
 
-from submission import DataGenerator, MANN
+# Check if submission module is present.  If it is not, then main() will not be executed.
+use_submission = importlib.util.find_spec('submission') is not None
+if use_submission:
+  from submission import DataGenerator, MANN
 
 
 def train_step(images, labels, model, optim, eval=False):
@@ -27,7 +31,11 @@ def main(config):
     np.random.seed(config.random_seed)
     
     if config.device == "gpu" and torch.backends.mps.is_available() and torch.backends.mps.is_built():
-        device = torch.device("mps")
+        # Waiting for PyTorch 2.0 to enable MPS
+        # device = torch.device("mps")
+        
+        # Default to cpu as for now mps it is not stable. 
+        device = torch.device("cpu")
     elif config.device == "gpu" and torch.cuda.is_available():
         device = torch.device("cuda")
     else:
