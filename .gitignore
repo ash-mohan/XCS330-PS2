@@ -4,6 +4,7 @@ runs*
 *.npy
 
 .DS_Store
+.vscode
 *.acn
 *.acr
 *.alg
