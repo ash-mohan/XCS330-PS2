@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ARG_DEVICE=--device=${1:-'cpu')}
+ARG_DEVICE=--device=${1:-'cpu'}
 
 # Experiment 1
 python main.py --num_shot 1 --num_classes 2 $ARG_DEVICE

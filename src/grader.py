@@ -40,6 +40,17 @@ def fix_random_seeds(
     if set_torch:
         torch.manual_seed(seed)
 
+def check_omniglot():
+    """
+    Check if Omniglot dataset is available.
+    """
+    if not os.path.isdir("./omniglot_resized"):
+        gdd.download_file_from_google_drive(
+            file_id="1iaSFXIYC3AB8q9K_M-oVMa4pmB7yKMtI",
+            dest_path="./omniglot_resized.zip",
+            unzip=True,
+        )
+    assert os.path.isdir("./omniglot_resized"), "Omniglot dataset is not available! Run `python main.py` first to download the dataset!"
 
 #########
 # TESTS #
@@ -49,16 +60,8 @@ def fix_random_seeds(
 class Test_1(GradedTestCase):
 
     def setUp(self):
+        check_omniglot()
         
-        # Download Omniglot Dataset if not available
-        if not os.path.isdir("./omniglot_resized"):
-            gdd.download_file_from_google_drive(
-                file_id="1iaSFXIYC3AB8q9K_M-oVMa4pmB7yKMtI",
-                dest_path="./omniglot_resized.zip",
-                unzip=True,
-            )
-        assert os.path.isdir("./omniglot_resized"), "Omniglot dataset is not available! Run `python main.py` first to download the dataset!"
-
         self.K, self.N, self.M, self.B = 1, 2, 784, 128
 
         self.data_generator = submission.DataGenerator
@@ -165,15 +168,7 @@ class Test_2(GradedTestCase):
 
     def setUp(self):
 
-        # Download Omniglot Dataset if not available
-        if not os.path.isdir("./omniglot_resized"):
-            gdd.download_file_from_google_drive(
-                file_id="1iaSFXIYC3AB8q9K_M-oVMa4pmB7yKMtI",
-                dest_path="./omniglot_resized.zip",
-                unzip=True,
-            )
-
-        assert os.path.isdir("./omniglot_resized"), "Omniglot dataset is not available! Run `python main.py` first to download the dataset!"
+        check_omniglot()
 
         self.K, self.N, self.B, self.H = 2, 2, 128, 128
 
